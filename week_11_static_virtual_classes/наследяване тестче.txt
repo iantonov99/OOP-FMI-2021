@@ -1,0 +1,102 @@
+10. зад. (10 т.) Намерете резултата от изпълнението на 
+програмата. 
+
+#include <iostream>
+using namespace std;
+
+class B1
+{ public:
+       B1(int a, int b = 1)
+       { n = a; m = b;
+         cout << "B1: " << n << ", " << m << endl;
+       }
+    B1(const B1& p)
+    {  n = p.n+1;
+        m = p.m+2;
+       cout << "B1(const B1&)\n";
+       cout << "B1.n: " << n << endl 
+               << "B1.m: " << m << endl;
+    }
+    B1& operator=(const B1& p)
+    { cout << "B1::operator=()\n";
+       if (this != &p)
+       { n = p.n + 1;
+         m = p.m -2;
+          cout << "B1.n: " << n << endl 
+                  << "B1.m: " << m << endl;
+        }
+        return *this;
+     }
+  private:
+     int n, m;
+};
+
+class B2
+{ public:
+       B2(int a = 1, int b = 0)
+       { n = a; 
+          m = b;
+          cout << "B2: " << n << ", " << m << endl;
+       }
+      B2& operator=(const B2& p)
+      { cout << "B2::operator=()\n";
+         if (this != &p)
+         { n = p.n - 2;
+            m = p.m +1;
+            cout << "B2.n: " << n << endl 
+                   << "B2.m: " << m << endl;
+          }
+          return *this;
+     }
+   private:
+       int n, m;
+};
+class B3
+{ public:
+       B3(int a = 2, int b = 1)
+       { n = a; 
+          m = b;
+          cout << "B3: " << n << ", " << m << endl;
+       }
+        B3(const B3& p)
+        { n = p.n + 1;
+           m = p.m + 3;
+           cout << "B3(const B3&)\n";
+           cout << "B3.n: " << n << endl 
+	     << "B3.m: " << m << endl;
+        }
+     private:
+        int n, m;
+};
+
+class D : public B3, B1, protected B2
+{ public:
+        D(int x = 1, int y = 3, int z = 5) : B1(x), B2(y, z),
+                                                               B3(z, x), b1(x), 
+                                                               b3(y), b2(z)
+        {  n = z-x; 
+           m = x-y;
+           cout << "D: " << n << ", " << m << endl;
+        }
+        D(const D& p) : B1(p), b1(p), B3(p), b2(p)
+        {  cout << "D(const D&)\n";
+            n =  p.n + 2;
+            m = p.m + 1;
+           cout << "D.n: " << n << endl 
+	    << "D.m: " << m << endl;
+        }
+     private:
+        int n, m;
+        B3 b3;
+        B2 b2; 
+        B1 b1;
+
+};
+
+int main()
+{ D d1, d2(2,1, 2);
+   D d3 = d1;
+   d1= d2;
+   return 0;
+}
+
